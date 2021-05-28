@@ -1,0 +1,72 @@
+﻿@{
+	ViewBag.Title = "Thêm CLASS AJAX";
+}
+
+<h1 class="text-center">THÊM LỚP</h1>
+<form id="formAdd" method="post">
+	@Html.AntiForgeryToken()
+	<div class="form-group">
+		<input name="Id" id="Id" type="hidden" class="form-control" />
+	</div>
+	<div class="form-group">
+		<label for="Code" class="control-label">Nhập mã lớp</label>
+		<input name="Code" id="Code" class="form-control" value="" />
+	</div>
+	<div class="form-group">
+		<label for="ClassName" class="control-label">Nhập tên lớp</label>
+		<input name="ClassName" id="ClassName" class="form-control" value="" />
+	</div>
+	<div class="form-group">
+		<label for="TeacherName" class="control-label">Nhập tên giáo viên</label>
+		<input name="TeacherName" id="TeacherName" class="form-control" value="" />
+	</div>
+	<div class="form-group">
+		<label for="SchoolId" class="control-label">Chọn trường</label>
+		<select name="SchoolId" id="SchoolId" class="form-control">
+			<option>---Chọn trường---</option>
+		</select>
+	</div>
+	<button class="btn btn-outline-primary" id="js-Add">
+		<i class="fas fa-user-plus fa-2x"></i>
+	</button>
+	<a class="btn btn-link" asp-controller="ClassAjax" asp-action="Index">
+		<i class="fas fa-list-ul fa-2x"></i>
+	</a>
+</form>
+
+@section Scripts {
+	<script>
+		$(document).ready(function () {
+			const optionSchools = (data) => {
+				data.forEach((res) => {
+					var options = `<option value="${res.id}">${res.name}</option>`;
+					$(options).appendTo('select');
+				});
+			};
+			$.ajax({
+				type: 'GET',
+				url: '/classajax/addclass_ajax',
+				success: function (res) {
+					console.log(res);
+					optionSchools(res);
+				}
+			});
+			$("#js-Add").on('click', (e) => {
+				var formData = $("#formAdd").serialize();
+				e.preventDefault();
+				$.ajax({
+					type: 'POST',
+					url: '/classajax/addclass_ajax',
+					dataType: 'json',
+					data: formData,
+					success: function (res) {
+						if (res == true) {
+							alert("Thêm dữ liệu thành công!");
+							window.location.href = "/classajax";
+						}
+					}
+				})
+			})
+		});
+	</script>
+}

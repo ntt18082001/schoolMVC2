@@ -1,0 +1,65 @@
+﻿@model IEnumerable<SchoolMVC.Models.Class>
+
+@{
+	ViewBag.Title = "Bảng CLASS";
+}
+
+<div class="text-center">
+	<h1>Bảng <span class="badge badge-dark">CLASS</span></h1>
+</div>
+
+<table class="table" border="1">
+	<thead class="table-dark text-center">
+		<tr>
+			<th>
+				@Html.DisplayNameFor(model => model.Code)
+			</th>
+			<th>
+				@Html.DisplayNameFor(model => model.ClassName)
+			</th>
+			<th>
+				@Html.DisplayNameFor(model => model.TeacherName)
+			</th>
+			<th>
+				@Html.DisplayNameFor(model => model.School.Name)
+			</th>
+			<th>Chi tiết / Sửa / Xóa</th>
+		</tr>
+	</thead>
+	<tbody>
+		@foreach (var item in Model)
+		{
+			<tr>
+				<td>
+					@Html.DisplayFor(Model => item.Code)
+				</td>
+				<td class="text-center">
+					@Html.DisplayFor(Model => item.ClassName)
+				</td>
+				<td>
+					@Html.DisplayFor(Model => item.TeacherName)
+				</td>
+				<td>
+					@Html.DisplayFor(Model => item.School.Name)
+				</td>
+				<td class="text-center">
+					<div class="btn-group">
+						<a class="btn btn-outline-dark" href="/class/@SlugGenerator.SlugGenerator.GenerateSlug(item.ClassName)-@item.Id">
+							<i class="fas fa-eye"></i>
+						</a>
+						<a class="btn btn-outline-dark" asp-action="Update" asp-route-id="@item.Id">
+							<i class="fas fa-edit"></i>
+						</a>
+						<a class="btn btn-outline-dark" onclick="return confirm('Xác nhận xóa?')" asp-action="Delete" asp-route-id="@item.Id">
+							<i class="fas fa-trash-alt"></i>
+						</a>
+					</div>
+				</td>
+			</tr>
+		}
+	</tbody>
+</table>
+
+<a class="btn btn-outline-dark" asp-action="AddClass">
+	<i class="fas fa-plus fa-2x"></i>
+</a>

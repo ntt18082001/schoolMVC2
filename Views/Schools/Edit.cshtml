@@ -1,0 +1,83 @@
+﻿@{
+	ViewBag.Title = "Sửa SCHOOL";
+}
+
+<h1 class="text-center">Cập nhật Trường</h1>
+<form id="formUpdate" method="post">
+	@Html.AntiForgeryToken()
+	<div class="form-group">
+		<input name="Id" id="Id" class="form-control" type="hidden" />
+	</div>
+	<div class="form-group">
+		<label for="Name" class="control-label">Nhập tên trường</label>
+		<input id="Name" name="Name" class="form-control" value="" />
+	</div>
+	<div class="form-group">
+		<label for="Address" class="control-label">Nhập địa chỉ</label>
+		<input id="Address" name="Address" class="form-control" value="" />
+	</div>
+	<div class="form-group">
+		<label for="PhoneNumber" class="control-label">Nhập số điện thoại</label>
+		<input id="PhoneNumber" name="PhoneNumber" class="form-control" value="" />
+	</div>
+	<div class="form-group">
+		<label for="Email" class="control-label">Nhập email</label>
+		<input id="Email" name="Email" class="form-control" value="" />
+	</div>
+	<button class="btn btn-outline-primary" id="js-Update">
+		<i class="fas fa-user-edit fa-2x"></i>
+	</button>
+	<a class="btn btn-outline-success" asp-action="Index">
+		<i class="fas fa-user-times fa-2x"></i>
+	</a>
+	<a class="btn btn-link" asp-action="Index">
+		<i class="fas fa-list-ul fa-2x"></i>
+	</a>
+</form>
+
+@section Scripts {
+	<script>
+		$(document).ready(function () {
+			var form = $("#formUpdate");
+			const getParameterUrl = (url) => {
+				var params = {};
+				var parser = document.createElement('a');
+				parser.href = url;
+				var query = parser.search.substring(1);
+				var vars = query.split('&');
+				for (var i = 0; i < vars.length; i++) {
+					var pair = vars[i].split('=');
+					params[pair[0]] = decodeURIComponent(pair[1]);
+				}
+				return params;
+			}
+			let p = getParameterUrl(window.location.href);
+			let id = p.id;
+			$.get('/schools/editajax/' + id, { id: id },
+				function (data, textStatus, jqXHR) {
+					form.find("#Id").val(data.id);
+					form.find("#Name").val(data.name);
+					form.find("#Address").val(data.address);
+					form.find("#PhoneNumber").val(data.phoneNumber);
+					form.find("#Email").val(data.email);
+				},
+				"json"
+			);
+			$('#js-Update').on('click', (e) => {
+				e.preventDefault();
+				var formData = $('#formUpdate').serialize();
+				$.ajax({
+					type: 'POST',
+					url: '/schools/editajax',
+					dataType: 'json',
+					data: formData,
+					success: function (res) {
+						if (res == true) {
+							window.location.href = "/schools";
+						}
+					}
+				});
+			});
+		});
+	</script>
+}

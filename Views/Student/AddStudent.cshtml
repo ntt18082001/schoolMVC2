@@ -1,0 +1,61 @@
+﻿@model SchoolMVC.Models.Student
+
+@{
+	ViewData["Title"] = "Thêm sinh viên";
+}
+
+<h1 class="text-center">THÊM LỚP</h1>
+
+<form asp-action="AddStudent" method="post" enctype="multipart/form-data">
+	<div class="form-group">
+		<label asp-for="Code" class="control-label">Nhập MSSV</label>
+		<input asp-for="Code" class="form-control" />
+	</div>
+	<div class="form-group">
+		<label asp-for="Name" class="control-label">Nhập tên SV</label>
+		<input asp-for="Name" class="form-control" />
+	</div>
+	<div class="form-group">
+		<label asp-for="YearOfBirth" class="control-label">Nhập năm sinh</label>
+		<input asp-for="YearOfBirth" class="form-control" />
+	</div>
+	<div class="form-group">
+		<label asp-for="Gender" class="control-label">Giới tính</label>
+		<select asp-for="Gender" class="form-control">
+			<option>---Chọn giới tính---</option>
+			<option value="false">Nam</option>
+			<option value="true">Nữ</option>
+		</select>
+	</div>
+	<div class="form-group">
+		<label asp-for="Address" class="control-label">Nhập địa chỉ</label>
+		<input asp-for="Address" class="form-control" />
+	</div>
+	<div class="form-group">
+		<label asp-for="Avatar">Chọn avatar</label>
+		<input type="file" asp-for="Avatar" class="form-control-file" />
+	</div>
+	<div class="form-group">
+		<label asp-for="Detail" class="control-label">Chi tiết</label>
+		<input asp-for="Detail" class="form-control" />
+	</div>
+	<div class="form-group">
+		<label asp-for="ClassId" class="control-label">Chọn lớp</label>
+		<select asp-for="ClassId" class="form-control" asp-items="@ViewBag.listClass">
+			<option>---Chọn lớp---</option>
+		</select>
+	</div>
+	<button class="btn btn-outline-primary" type="submit">
+		<i class="fas fa-user-plus fa-2x"></i>
+	</button>
+	<a class="btn btn-outline-success" asp-action="Index">
+		<i class="fas fa-user-times fa-2x"></i>
+	</a>
+	<a class="btn btn-link" asp-action="Index">
+		<i class="fas fa-list-ul fa-2x"></i>
+	</a>
+</form>
+
+@section Scripts {
+	@{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

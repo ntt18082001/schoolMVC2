@@ -1,0 +1,72 @@
+﻿@{
+	ViewBag.Title = "Bảng CLASS Ajax";
+}
+<div class="text-center">
+	<h1>Bảng <span class="badge badge-dark">CLASS AJAX</span></h1>
+</div>
+<table class="table" border="1">
+	<thead class="table-dark text-center">
+		<tr>
+			<th>
+				Mã lớp
+			</th>
+			<th>
+				Tên lớp
+			</th>
+			<th>
+				Tên giảng viên
+			</th>
+			<th>
+				Tên trường
+			</th>
+			<th>Chi tiết / Sửa / Xóa</th>
+		</tr>
+	</thead>
+	<tbody>
+	</tbody>
+</table>
+
+<a class="btn btn-outline-dark" asp-controller="ClassAjax" asp-action="AddClass">
+	<i class="fas fa-plus fa-2x"></i>
+</a>
+
+@section Scripts{
+	<script>
+		const loadData = () => {
+			$.ajax({
+				type: 'GET',
+				url: '/classajax/indexajax',
+				success: (res) => {
+					$('tbody').html('');
+					renderData(res);
+				}
+			});
+		}
+		const renderData = (data) => {
+			data.forEach((res, index) => {
+				var tr = $('<tr>').appendTo('tbody');
+				var td = `<td class="text-center">${res.code}</td>
+							<td class="text-center">${res.className}</td>
+							<td>${res.teacherName}</td>
+							<td>${res.school.name}</td>
+							<td class="text-center">
+									<div class="btn-group">
+										<a class="btn btn-outline-dark js-detail" data-id="${res.id}" href="/classajax/details?id=${res.id}">
+											<i class="fas fa-eye"></i>
+										</a>
+										<a class="btn btn-outline-dark js-update" data-id="${res.id}" href="/classajax/edit?id=${res.id}">
+											<i class="fas fa-edit"></i>
+										</a>
+										<a class="btn btn-outline-dark js-delete" data-id="${res.id}">
+											<i class="fas fa-trash-alt"></i>
+										</a>
+									</div>
+								</td>`;
+				$(td).appendTo(tr);
+			});
+		}
+		$(document).ready(() => {
+			loadData();
+		});
+	</script>
+}

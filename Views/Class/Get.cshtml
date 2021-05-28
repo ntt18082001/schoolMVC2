@@ -1,0 +1,31 @@
+﻿@model SchoolMVC.Models.Class
+
+@{
+	ViewData["Title"] = "Chi tiết lớp";
+}
+
+<table class="table mt-5" border="1">
+	<thead class="table-dark">
+		<tr>
+			<th>@Html.DisplayNameFor(Model => Model.Id)</th>
+			<th>@Html.DisplayNameFor(Model => Model.Code)</th>
+			<th>@Html.DisplayNameFor(Model => Model.ClassName)</th>
+			<th>@Html.DisplayNameFor(Model => Model.TeacherName)</th>
+			<th>School name</th>
+		</tr>
+	</thead>
+	<tbody>
+		<tr>
+			<td>@Html.DisplayFor(Model => Model.Id)</td>
+			<td> @Html.DisplayFor(Model => Model.Code)</td>
+			<td>@Html.DisplayFor(Model => Model.ClassName)</td>
+			<td>@Html.DisplayFor(Model => Model.TeacherName)</td>
+			<td>@Html.DisplayFor(Model => Model.School.Name)</td>
+		</tr>
+	</tbody>
+</table>
+
+<div>
+	<a class="btn btn-outline-secondary" asp-action="Index"><i class="fas fa-backward"></i></a>
+	<a class="btn btn-outline-primary" asp-action="Update" asp-route-id="@Model.Id"><i class="fas fa-edit"></i></a>
+</div>

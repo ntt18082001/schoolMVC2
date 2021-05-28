@@ -1,0 +1,81 @@
+﻿@*@model SchoolMVC.Models.School*@
+
+@{
+    ViewBag.Title = "Chi tiết trường";
+}
+
+<table class="table mt-5" border="1">
+	<thead class="table-dark">
+		<tr>
+			<th>Id</th>
+			<th>Name</th>
+			<th>Address</th>
+			<th>Phone number</th>
+			<th>email</th>
+		</tr>
+	</thead>
+	<tbody>
+		@*<tr>
+			<td>@Html.DisplayFor(Model => Model.Id)</td>
+			<td> @Html.DisplayFor(Model => Model.Name)</td>
+			<td>@Html.DisplayFor(Model => Model.Address)</td>
+			<td>@Html.DisplayFor(Model => Model.PhoneNumber)</td>
+			<td>@Html.DisplayFor(Model => Model.Email)</td>
+		</tr>*@
+	</tbody>
+</table>
+
+@*<div>
+    <a class="btn btn-outline-secondary" asp-action="Index"><i class="fas fa-backward"></i></a>
+    <a class="btn btn-outline-primary js-update" asp-action="Edit" asp-route-id="@Model.Id"><i class="fas fa-edit"></i></a>
+</div>*@
+
+@section Scripts{ 
+	<script>
+		$(document).ready(function () {
+			const getParameterUrl = (url) => {
+				var params = {};
+				var parser = document.createElement('a');
+				parser.href = url;
+				var query = parser.search.substring(1);
+				var vars = query.split('&');
+				for (var i = 0; i < vars.length; i++) {
+					var pair = vars[i].split('=');
+					params[pair[0]] = decodeURIComponent(pair[1]);
+				}
+				return params;
+			}
+			var p = getParameterUrl(window.location.href);
+			var id = p.id;
+			$.ajax({
+				type: 'GET',
+				url: '/schools/detailsajax/' + id,
+				success: function (res) {
+					render(res);
+				}
+			}).then(function () {
+				$(".js-update").on('click', (e) => {
+					var id = $(e.currentTarget).attr('data-id');
+					$.get('/schools/editajax/' + id, "json");
+					window.location.href = '/school/edit?id=' + id;
+				});
+			});
+			function render(data) {
+				var tr = $('<tr>').appendTo('tbody');
+				var td = `
+						<td>${data.id}</td>
+						<td>${data.name}</td>
+						<td>${data.address}</td>
+						<td>${data.phoneNumber}</td>
+						<td>${data.email}</td>
+						`;
+				var btn = `<div>
+							<a class="btn btn-outline-secondary" href="/schools"><i class="fas fa-backward"></i></a>
+							<a class="btn btn-outline-primary js-update" data-id="${data.id}" href="/schools/edit?id=${data.id}"><i class="fas fa-edit"></i></a>
+						</div>`
+				$(btn).appendTo('.container');
+				$(td).appendTo(tr);
+			}
+		});
+	</script>
+}

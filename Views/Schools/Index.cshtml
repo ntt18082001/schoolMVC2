@@ -1,0 +1,103 @@
+﻿@{
+    ViewBag.Title = "Bảng SCHOOL";
+}
+
+<div class="text-center">
+	<h1>Bảng <span class="badge badge-dark">SCHOOL</span></h1>
+</div>
+
+<table id="myTable" class="table" border="1">
+    <thead class="table-dark text-center">
+        <tr>
+            <th>
+                Tên trường
+            </th>
+            <th>
+                Địa chỉ
+            </th>
+            <th>
+                Số điện thoại
+            </th>
+            <th>
+                Email
+            </th>
+			<th>Chi tiết / Sửa / Xóa</th>
+        </tr>
+    </thead>
+    <tbody>
+    </tbody>
+</table>
+
+<a class="btn btn-outline-dark" asp-action="Create">
+	<i class="fas fa-plus fa-2x"></i>
+</a>
+
+@section Scripts{ 
+	<script>
+		function loadData() {
+			$.ajax({
+				type: 'GET',
+				url: '/schools/indexajax',
+				success: function (res) {
+					$('tbody').html('');
+					render(res);
+				}
+			}).then(function () {
+				$('.js-detail').click(function (e) {
+					var id = $(e.currentTarget).attr('data-id');
+					$.get('/schools/detailsajax/' + id, "json");
+					window.location.href = '/school/details?id=' + id;
+				});
+				$('.js-update').click(function (e) {
+					var id = $(e.currentTarget).attr('data-id');
+					$.get('/schools/editajax/' + id, "json");
+					window.location.href = '/school/edit?id=' + id;
+				});
+				$('.js-delete').click(function (e) {
+					e.preventDefault();
+					var id = $(e.currentTarget).attr('data-id');
+					$.ajax({
+						method: 'DELETE',
+						url: '/schools/deleteajax/' + id,
+						data: { id: id },
+						success: function (res) {
+							if (res == true) {
+								alert("Đã xóa thành công!");
+								loadData();
+							} else {
+								alert("Xóa thất bại!");
+							}
+						}
+					});
+				});
+			})
+		}
+		function render(data) {
+			return data.forEach(function (res, index) {
+				var tr = $('<tr>').appendTo('tbody');
+				var td = `<td>${res.name}</td>
+								<td class="text-center">${res.address}</td>
+								<td>${res.phoneNumber}</td>
+								<td>${res.email}</td>
+								<td class="text-center">
+									<div class="btn-group">
+										<a class="btn btn-outline-dark js-detail" data-id="${res.id}" href="/schools/details?id=${res.id}">
+											<i class="fas fa-eye"></i>
+										</a>
+										<a class="btn btn-outline-dark js-update" data-id="${res.id}" href="/schools/edit?id=${res.id}">
+											<i class="fas fa-edit"></i>
+										</a>
+										<a class="btn btn-outline-dark js-delete" data-id="${res.id}">
+											<i class="fas fa-trash-alt"></i>
+										</a>
+									</div>
+								</td>
+							`
+				$(td).appendTo(tr);
+			});
+		};
+		$(document).ready(function () {
+			loadData();
+		});
+	</script>
+}
